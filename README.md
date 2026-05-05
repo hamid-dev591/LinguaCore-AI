@@ -1,0 +1,2 @@
+# LinguaCore-AI
+LinguaCore AI
