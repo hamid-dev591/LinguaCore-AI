@@ -1,4 +1,15 @@
 // 1. الإعدادات الأساسية والأيقونات
+// كود إجباري لحذف ميزة الأوفلاين من متصفح المستخدم
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister();
+            console.log("تم حذف ميزة الأوفلاين بنجاح!");
+        }
+    });
+}
+
+
 lucide.createIcons();
 
 const languages = {
@@ -164,3 +175,132 @@ window.onload = () => {
     updateDisplayUI();
     lucide.createIcons();
 };
+
+// 1. إصلاح زر وضع النهار/الليل (Theme Toggle)
+document.getElementById('themeToggle').onclick = () => {
+    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('light-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    
+    // تحديث الأيقونة برمجياً
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        lucide.createIcons(); // إعادة تحميل الأيقونات لتظهر التغيير
+    }
+    saveState();
+};
+
+// 2. إصلاح زر التبديل (Swap Button) - يقلب اللغات والنصوص
+document.getElementById('swapBtn').onclick = () => {
+    const tempLang = fromLang.value;
+    fromLang.value = toLang.value;
+    toLang.value = tempLang;
+
+    const tempText = inputText.value;
+    inputText.value = outputText.value;
+    outputText.value = tempText;
+
+    saveState();
+};
+
+// 3. إصلاح زر الإعدادات (Settings Menu)
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsMenu = document.getElementById('settingsMenu');
+
+if (settingsBtn && settingsMenu) {
+    settingsBtn.onclick = (e) => {
+        e.stopPropagation(); // منع إغلاق القائمة فور النقر عليها
+        settingsMenu.classList.toggle('hidden');
+    };
+
+    // إغلاق القائمة عند النقر في أي مكان آخر بالشاشة
+    window.addEventListener('click', () => {
+        settingsMenu.classList.add('hidden');
+    });
+
+    settingsMenu.onclick = (e) => e.stopPropagation();
+}
+
+// 1. منطق زر البداية وإخفاء صفحة الترحيب
+document.body.classList.add('locked'); // قفل السكرول عند التحميل
+
+document.getElementById('startAppBtn').onclick = () => {
+    const welcome = document.getElementById('welcomeScreen');
+    welcome.classList.add('welcome-hide');
+    document.body.classList.remove('locked'); // فتح السكرول بعد الدخول
+    
+    // تشغيل الأيقونات مرة أخرى للتأكد من ظهورها داخل التطبيق
+    setTimeout(() => {
+        welcome.style.display = 'none';
+        lucide.createIcons();
+    }, 1000);
+};
+
+
+
+// 3. منع القائمة الافتراضية لليمين (اختياري لزيادة الانغماس)
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+
+// تأكيد تشغيل الأيقونات والوظائف عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    console.log("UI Elements Initialized!");
+});
+
+// دالة النطق الصوتي المحسنة
+function speakText() {
+    const text = document.getElementById('outputText').value;
+    const lang = document.getElementById('toLang').value;
+
+    if (!text) return;
+
+    // إلغاء أي صوت شغال حالياً
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // جلب الأصوات المتاحة في جهازك وتنقيتها
+    let voices = window.speechSynthesis.getVoices();
+    
+    // محاولة اختيار أفضل صوت متاح للغة المختارة
+    utterance.voice = voices.find(v => v.lang.startsWith(lang)) || voices[0];
+    
+    utterance.lang = lang;
+    utterance.rate = 1.0;
+    utterance.volume = 1.0; // تأكد أن الصوت بأعلى درجة
+
+    window.speechSynthesis.speak(utterance);
+    
+}
+
+// ربط الدالة بالزر (تأكد أن ID الزر هو speakBtn)
+const speakBtn = document.getElementById('speakBtn');
+if (speakBtn) {
+    speakBtn.addEventListener('click', speakText);
+}
+
+// المحرك الأقوى والأسرع للترجمة
+async function translateText(text, from, to) {
+    try {
+        // هذا الرابط (Endpoint) هو الأسرع حالياً ويدعم كل اللغات بدقة عالية
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // استخراج النص المترجم فقط لضمان عدم تكرار الكلمة الأصلية
+        if (data && data[0]) {
+            let translatedText = "";
+            data[0].forEach(part => {
+                if (part[0]) translatedText += part[0];
+            });
+            return translatedText;
+        }
+        return "خطأ في معالجة الترجمة";
+    } catch (error) {
+        console.error("API Error:", error);
+        return "خطأ في الاتصال بالخادم.. تأكد من الإنترنت";
+    }
+}
