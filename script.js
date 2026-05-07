@@ -304,3 +304,19 @@ async function translateText(text, from, to) {
         return "خطأ في الاتصال بالخادم.. تأكد من الإنترنت";
     }
 }
+
+function updateButtonStyles(mode) {
+    if (mode === 'photo') {
+        btnPhoto.className = 'nav-tab-btn active';
+        btnText.className = 'nav-tab-btn inactive';
+    } else {
+        btnText.className = 'nav-tab-btn active';
+        btnPhoto.className = 'nav-tab-btn inactive';
+    }
+}
+// قائمة اللغات التي تكتب من اليمين لليسار (RTL)
+const rtlLanguages = ['ar', 'ur', 'fa'];
+
+// داخل دالة التبديل أو المعالجة
+const translatedDiv = document.getElementById('translatedText');
+translatedDiv.dir = rtlLanguages.includes(selectedLang) ? 'rtl' : 'ltr';

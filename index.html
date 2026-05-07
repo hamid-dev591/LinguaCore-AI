@@ -3,16 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="LinguaCore AI - The best professional alternative to Google Translate. Fast, accurate, and powered by neural AI for 100+ languages.">
-<meta name="keywords" content="Translate, Google Translate, AI Translation, LinguaCore, HamidDev, الترجمة, مترجم جوجل, ترجمة فورية, بديل مترجم جوجل, مترجم لغات">
-<meta name="author" content="HamidDev">
-<meta name="robots" content="index, follow">
-
-<meta property="og:title" content="LinguaCore AI | Professional Translation Engine">
-<meta property="og:description" content="Translate text instantly with high accuracy using our AI-powered tool. Created by HamidDev.">
-<meta property="og:image" content="logo.png"> <meta property="og:url" content="https://hd1.vercel.app">
-
-<link rel="canonical" href="https://hd1.vercel.app">
     <title>LinguaCore AI </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -91,10 +81,20 @@
             <button id="exportBtn" class="p-3 rounded-xl hover:bg-green-500/20 text-green-500 transition-all" title="Export as JSON"><i data-lucide="download" class="w-5"></i></button>
         </div>
 
+        <div class="flex justify-center gap-4 mb-10">
+    <button id="textModeBtn" class="nav-tab-btn active">
+        <i data-lucide="type" class="w-5 h-5"></i> Text
+    </button>
+    
+    <button id="photoModeBtn" class="nav-tab-btn inactive">
+        <i data-lucide="camera" class="w-5 h-5"></i> <a href="photo.html">Photo Translate</a>
+    </button>
+</div>
+
         <!-- قسم الاختيارات والترجمة كما هو سابقاً -->
         <div class="flex flex-col md:flex-row items-center gap-4 mb-10">
             <select id="fromLang" class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-8 outline-none font-bold cursor-pointer transition-all">
-                <option value="auto">Auto Detect Language</option>
+
             </select>
             <button id="swapBtn" class="p-5 rounded-full bg-white/5 hover:bg-indigo-500 transition-all"><i data-lucide="arrow-left-right" class="w-6"></i></button>
             <select id="toLang" class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-8 outline-none font-bold cursor-pointer transition-all"></select>
@@ -136,6 +136,9 @@
         </div>
         <div id="historyList" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto pr-2"></div>
     </div>
+
+
+    
 
     
 

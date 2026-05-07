@@ -60,3 +60,67 @@ body.locked {
     transform: translateY(-100%) scale(1.1);
     filter: blur(20px);
 }
+
+/* أهم كود: لضمان أن العناصر تختفي فعلياً من الواجهة */
+.hidden {
+    display: none !important;
+}
+
+/* تنسيق ساحة رفع الصور لتكون بنفس حجم ساحة النص */
+#photoUploadArea {
+    z-index: 5;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* تأثير عند تمرير الماوس فوق منطقة الرفع */
+#photoUploadArea:hover {
+    border-color: #818cf8; /* لون indigo-400 */
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* منع تداخل النصوص إذا ظهرت الواجهات معاً بالخطأ */
+.relative > .absolute {
+    pointer-events: auto;
+}
+
+/* تصميم أزرار الناف بار الداخلي */
+.nav-tab-btn {
+    display: inline-flex;
+    gap: 12px;
+    padding: 12px 32px;
+    border-radius: 99px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* الزر النشط (Active) */
+.nav-tab-btn.active {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+}
+
+/* الزر غير النشط (Inactive) */
+.nav-tab-btn.inactive {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.nav-tab-btn.inactive:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+select option {
+    background-color: #1e293b; /* لون غامق يناسب Dark Mode */
+    color: white;
+    padding: 10px;
+}
